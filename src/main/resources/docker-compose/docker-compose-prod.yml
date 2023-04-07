@@ -1,0 +1,95 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:1.22.1
+    container_name: nginx
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_PORT=80
+    restart: always
+    volumes:
+      - "${PWD}/mount/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "${PWD}/mount/nginx/logs:/var/log/nginx"
+      - "${PWD}/mount/nginx/conf.d/:/etc/nginx/conf.d"
+    network_mode: host
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=45.77.178.28:9192,45.77.178.28:9292,45.77.178.28:9392
+    network_mode: host
+    depends_on:
+      - kafka1
+  kafka1:
+    image: 'bitnami/kafka:3.3.1'
+    container_name: kafka1
+    user: root
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9192,CONTROLLER://:9193
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@45.77.178.28:9193,2@45.77.178.28:9293,3@45.77.178.28:9393
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_HEAP_OPTS=-Xmx512M -Xms256M
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://45.77.178.28:9192
+      - KAFKA_BROKER_ID=1
+    volumes:
+      - "${PWD}/mount/kafka_group/kafka1/kafka/kraft:/bitnami/kafka"
+    network_mode: host
+    depends_on:
+      - nginx
+  kafka2:
+    image: 'bitnami/kafka:3.3.1'
+    container_name: kafka2
+    user: root
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9292,CONTROLLER://:9293
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@45.77.178.28:9193,2@45.77.178.28:9293,3@45.77.178.28:9393
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_HEAP_OPTS=-Xmx512M -Xms256M
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://45.77.178.28:9292
+      - KAFKA_BROKER_ID=2
+    volumes:
+      - "${PWD}/mount/kafka_group/kafka2/kafka/kraft:/bitnami/kafka"
+    network_mode: host
+    depends_on:
+      - nginx
+  kafka3:
+    image: 'bitnami/kafka:3.3.1'
+    container_name: kafka3
+    user: root
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9392,CONTROLLER://:9393
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@45.77.178.28:9193,2@45.77.178.28:9293,3@45.77.178.28:9393
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_HEAP_OPTS=-Xmx512M -Xms256M
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://45.77.178.28:9392
+      - KAFKA_BROKER_ID=3
+    volumes:
+      - "${PWD}/mount/kafka_group/kafka3/kafka/kraft:/bitnami/kafka"
+    network_mode: host
+    depends_on:
+      - nginx
