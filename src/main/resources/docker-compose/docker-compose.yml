@@ -1,22 +1,22 @@
 version: '3.0'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper   # ¾µÏñ
+    image: wurstmeister/zookeeper   # é•œåƒ
     container_name: zookeeper
     ports:
-      - "2181:2181"                 # ¶ÔÍâ±©Â¶µÄ¶Ë¿ÚºÅ
+      - "2181:2181"                 # å¯¹å¤–æš´éœ²çš„ç«¯å£å·
     networks:
       - myNetwork
   kafka:
-    image: wurstmeister/kafka       # ¾µÏñ
+    image: wurstmeister/kafka       # é•œåƒ
     container_name: kafka
     volumes:
-      - /etc/localtime:/etc/localtime # ¹ÒÔØÎ»ÖÃ£¨kafka¾µÏñºÍËŞÖ÷»úÆ÷Ö®¼äÊ±¼ä±£³ÖÒ»Ö±£©
+      - /etc/localtime:/etc/localtime # æŒ‚è½½ä½ç½®ï¼ˆkafkaé•œåƒå’Œå®¿ä¸»æœºå™¨ä¹‹é—´æ—¶é—´ä¿æŒä¸€ç›´ï¼‰
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 47.96.190.164         # ĞŞ¸Ä:ËŞÖ÷»úIP
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181       # ¿¨·ò¿¨ÔËĞĞÊÇ»ùÓÚzookeeperµÄ
+      KAFKA_ADVERTISED_HOST_NAME: 47.96.190.164         # ä¿®æ”¹:å®¿ä¸»æœºIP
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181       # å¡å¤«å¡è¿è¡Œæ˜¯åŸºäºzookeeperçš„
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_LOG_RETENTION_HOURS: 120
       KAFKA_MESSAGE_MAX_BYTES: 10000000
@@ -36,15 +36,6 @@ services:
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-  kafka-manager:
-    image: sheepkiller/kafka-manager                # ¾µÏñ£º¿ªÔ´µÄweb¹ÜÀíkafka¼¯ÈºµÄ½çÃæ
-    container_name: kafka-manager
-    environment:
-      ZK_HOSTS: 47.96.190.164                         # ĞŞ¸Ä:ËŞÖ÷»úIP
-    ports:
-      - "9001:9000"                                 # ±©Â¶¶Ë¿Ú 9000Õâ¸ö¶Ë¿Ú³åÍ»Ì«¶à
-    depends_on:
-      - zookeeper
     networks:
       - myNetwork
   portainer:
@@ -58,16 +49,21 @@ services:
     networks:
       - myNetwork
   influxdb:
-    image: influxdb:1.7.8
+    image: influxdb:1.8
     container_name: influxdb
     ports:
       - '8086:8086'
-    volumes:
-      - "${PWD}/influxdb:/root/influxdb/data"
     environment:
       - INFLUXDB_ADMIN_USER=root
       - INFLUXDB_ADMIN_PASSWORD=lfx@influxdb666
-      - INFLUXDB_DB=test
+      - INFLUXDB_DB=test_db
+    networks:
+      - myNetwork
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana # admin z7WCPDhxCR92mn6
+    ports:
+      - "9001:3000"
     networks:
       - myNetwork
 networks:
