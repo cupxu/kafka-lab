@@ -1,0 +1,10 @@
+version: '3'
+services:
+  kafka-client:
+    image: kafka-client
+    ports:
+      - "8080"
+    networks:
+      - kafka-client
+networks:
+  kafka-client:

@@ -1,0 +1,14 @@
+version: '3.0'
+services:
+  influxdb:
+    image: influxdb #1.8
+    container_name: influxdb
+    ports:
+      - '8086:8086'
+      - '9999:9999'
+    environment:
+      - INFLUXDB_DB=my_db
+      - INFLUXDB_ADMIN_ENABLED= true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=lfx@influxdb666
+      - MAX_BODY_SIZE=10MB

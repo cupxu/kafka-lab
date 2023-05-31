@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.kafkalearning.mapper.MetricsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.kafkalearning.pojo.Metrics">
+        <id column="timestamp" property="timestamp" />
+        <result column="valid_time" property="validTime" />
+        <result column="node_nums" property="nodeNums" />
+        <result column="data_size" property="dataSize" />
+        <result column="message_sent" property="messageSent" />
+        <result column="message_consumed" property="messageConsumed" />
+        <result column="success_rate" property="successRate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        timestamp, valid_time, node_nums, data_size, message_sent, message_consumed, success_rate
+    </sql>
+
+</mapper>

@@ -1,11 +1,17 @@
 package com.example.kafkalearning.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.apache.kafka.common.requests.DescribeConfigsResponse.ConfigSource.TOPIC_CONFIG;
 
 /**
  * @description:
@@ -13,11 +19,9 @@ import org.springframework.kafka.support.converter.StringJsonMessageConverter;
  * @create: 2023-02-15 20:31
  **/
 @Configuration
-public class KafkaConfig {
-    @Value("${kafka.topic.my-topic1}")
-    String myTopic1;
-    @Value("${kafka.topic.my-topic2}")
-    String myTopic2;
+public class KafkaTopicConfig {
+    @Value("${kafka.topic.my-topic}")
+    String myTopic;
 
     /**
      * JSON消息转换器
@@ -31,12 +35,12 @@ public class KafkaConfig {
      * 通过注入一个 NewTopic 类型的 Bean 来创建 topic，如果 topic 已存在，则会忽略。
      */
     @Bean
-    public NewTopic myTopic1() {
-        return new NewTopic(myTopic1, 2, (short) 1);
-    }
-
-    @Bean
-    public NewTopic myTopic2() {
-        return new NewTopic(myTopic2, 1, (short) 1);
+    public NewTopic myTopic() {
+        Map<String, String> configs = new HashMap<>();
+        // Set retention time to 1 day
+        NewTopic newTopic = new NewTopic("my-topic", 5, (short) 3)
+                .configs(configs);
+        return newTopic;
     }
 }
+

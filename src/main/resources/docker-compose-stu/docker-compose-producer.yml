@@ -1,0 +1,10 @@
+version: '3'
+services:
+  kafka-producer:
+    image: kafka-producer:1024KB
+    ports:
+      - "8080"
+    networks:
+      - kafka-producer
+networks:
+  kafka-producer:

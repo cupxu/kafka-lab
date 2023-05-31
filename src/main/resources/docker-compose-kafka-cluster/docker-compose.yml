@@ -1,0 +1,139 @@
+version: '3'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeper
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-net
+
+  kafka1:
+    image: wurstmeister/kafka:2.12-2.4.0
+    container_name: "kafka1"
+    ports:
+      - "9091:9092"
+      - "8081:8081"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.134.11
+      KAFKA_ADVERTISED_PORT: 9091
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/logs
+      KAFKA_BROKER_ID: 1
+      KAFKA_offsets_topic_replication_factor: 3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.134.11 -Dcom.sun.management.jmxremote.rmi.port=8081"
+      JMX_PORT: 8081
+      KAFKA_MESSAGE_MAX_BYTES: 2010000
+      KAFKA_LOG_RETENTION_MS: 30
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka-net
+
+  kafka2:
+    image: wurstmeister/kafka:2.12-2.4.0
+    container_name: "kafka2"
+    ports:
+      - "9092:9092"
+      - "8082:8082"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.134.11
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/logs
+      KAFKA_BROKER_ID: 2
+      KAFKA_offsets_topic_replication_factor: 3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.134.11 -Dcom.sun.management.jmxremote.rmi.port=8082"
+      JMX_PORT: 8082
+      KAFKA_MESSAGE_MAX_BYTES: 2010000
+      KAFKA_LOG_RETENTION_MS: 30
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka-net
+
+  kafka3:
+    image: wurstmeister/kafka:2.12-2.4.0
+    container_name: "kafka3"
+    ports:
+      - "9093:9092"
+      - "8083:8083"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.134.11
+      KAFKA_ADVERTISED_PORT: 9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/logs
+      KAFKA_BROKER_ID: 3
+      KAFKA_offsets_topic_replication_factor: 3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.134.11 -Dcom.sun.management.jmxremote.rmi.port=8083"
+      JMX_PORT: 8083
+      KAFKA_MESSAGE_MAX_BYTES: 2010000
+      KAFKA_LOG_RETENTION_MS: 30
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka-net
+
+  kafka4:
+    image: wurstmeister/kafka:2.12-2.4.0
+    container_name: "kafka4"
+    ports:
+      - "9094:9092"
+      - "8084:8084"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.134.11
+      KAFKA_ADVERTISED_PORT: 9094
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/logs
+      KAFKA_BROKER_ID: 4
+      KAFKA_offsets_topic_replication_factor: 3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.134.11 -Dcom.sun.management.jmxremote.rmi.port=8084"
+      JMX_PORT: 8084
+      KAFKA_MESSAGE_MAX_BYTES: 2010000
+      KAFKA_LOG_RETENTION_MS: 30
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka-net
+
+  kafka5:
+    image: wurstmeister/kafka:2.12-2.4.0
+    container_name: "kafka5"
+    ports:
+      - "9095:9092"
+      - "8085:8085"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.134.11
+      KAFKA_ADVERTISED_PORT: 9095
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/logs
+      KAFKA_BROKER_ID: 5
+      KAFKA_offsets_topic_replication_factor: 3
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.134.11 -Dcom.sun.management.jmxremote.rmi.port=8085"
+      JMX_PORT: 8085
+      KAFKA_MESSAGE_MAX_BYTES: 2010000
+      KAFKA_LOG_RETENTION_MS: 30
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kafka-net
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    container_name: kafka-manager
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:

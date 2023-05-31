@@ -1,0 +1,14 @@
+version: '3.0'
+services:
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    ports:
+      - "9002:9000"
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+      - "/var/run/docker.sock:/var/run/docker.sock"  # admin 111222333444555
+    networks:
+      - myNetwork
+networks:
+  myNetwork:

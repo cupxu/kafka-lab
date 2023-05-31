@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: "mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: lfx@mysql666
+      MYSQL_DATABASE: my_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: lfx@mysql666
+    ports:
+      - "3306:3306"
+

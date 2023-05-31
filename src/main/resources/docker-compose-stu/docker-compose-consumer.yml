@@ -1,0 +1,10 @@
+version: '3'
+services:
+  kafka-consumer:
+    image: kafka-consumer:1024KB
+    ports:
+      - "8080"
+    networks:
+      - kafka-consumer
+networks:
+  kafka-consumer:
